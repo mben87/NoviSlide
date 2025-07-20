@@ -42,14 +42,15 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `loadMediaItems sets mediaItems on success`() = runTest {
+    fun `fetchMediaItems sets mediaItems on success`() = runTest {
         val dummyItems = listOf(
             MediaItem("http://test.com/image1.jpg", 5),
             MediaItem("http://test.com/video1.mp4", 10)
         )
         `when`(repository.getPlaylistsByScreenKey("Test")).thenReturn(dummyItems)
+        `when`(repository.getModified("Test")).thenReturn(111111)
 
-        viewModel.loadMediaItems("Test")
+        viewModel.fetchMediaItems("Test")
 
         viewModel.mediaItems.test {
             assertEquals(dummyItems, awaitItem())
@@ -57,10 +58,11 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `loadMediaItems sets error on failure`() = runTest {
+    fun `fetchMediaItems sets error on failure`() = runTest {
         `when`(repository.getPlaylistsByScreenKey("Test")).thenThrow(RuntimeException("Network error"))
+        `when`(repository.getModified("Test")).thenReturn(111111)
 
-        viewModel.loadMediaItems("Test")
+        viewModel.fetchMediaItems("Test")
         val error = viewModel.error.first { it != null }
 
         assertEquals(error, "Network error")
@@ -68,13 +70,13 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `loadMediaItems sets loading correctly`() = runTest {
+    fun `fetchMediaItems sets loading correctly`() = runTest {
         `when`(repository.getPlaylistsByScreenKey("Test")).thenReturn(emptyList())
+        `when`(repository.getModified("Test")).thenReturn(111111)
 
         viewModel.loading.test {
-            assertEquals(false, awaitItem()) // initial
-            viewModel.loadMediaItems("Test")
-            assertEquals(true, awaitItem()) // loading started
+            assertEquals(true, awaitItem()) // initial
+            viewModel.fetchMediaItems("Test")
             assertEquals(false, awaitItem()) // loading ended
         }
     }

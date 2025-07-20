@@ -1,5 +1,6 @@
 package com.novislide.presentation.home
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.novislide.data.repository.PlaylistRepository
@@ -44,22 +45,27 @@ class HomeViewModel @Inject constructor(
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
             while (isActive) {
-                try {
-                    val modified = repository.getModified(screenKey)
-
-                    if (localModified < modified) {
-                        localModified = modified
-
-                        val items = repository.getPlaylistsByScreenKey(screenKey)
-                        _mediaItems.value = items
-                    }
-                } catch (e: Exception) {
-                    _error.value = e.message
-                } finally {
-                    _loading.value = false
-                }
+                fetchMediaItems(screenKey)
                 delay(10 * 60 * 1000L) // 10 minutes
             }
+        }
+    }
+
+    @VisibleForTesting
+    suspend fun fetchMediaItems(screenKey: String) {
+        try {
+            val modified = repository.getModified(screenKey)
+
+            if (localModified < modified) {
+                localModified = modified
+
+                val items = repository.getPlaylistsByScreenKey(screenKey)
+                _mediaItems.value = items
+            }
+        } catch (e: Exception) {
+            _error.value = e.message
+        } finally {
+            _loading.value = false
         }
     }
 
