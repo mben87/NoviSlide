@@ -1,6 +1,7 @@
 package com.novislide.data.repository
 
 import com.novislide.data.NoviAPI
+import com.novislide.data.remote.model.ModifiedResponse
 import com.novislide.data.remote.model.PlaylistResponse
 import com.novislide.domain.model.MediaItem
 import com.novislide.domain.model.Playlist
@@ -50,6 +51,7 @@ class PlaylistRepositoryTest {
         )
 
         `when`(api.getPlaylists(screenKey)).thenReturn(mockResponse)
+        `when`(api.getModified(screenKey)).thenReturn(ModifiedResponse(1000L))
 
         val result = repository.getPlaylistsByScreenKey(screenKey)
 
@@ -73,6 +75,7 @@ class PlaylistRepositoryTest {
         val mockResponse = PlaylistResponse(screenKey, playlists = emptyList())
 
         `when`(api.getPlaylists(screenKey)).thenReturn(mockResponse)
+        `when`(api.getModified(screenKey)).thenReturn(ModifiedResponse(1000L))
 
         val result = repository.getPlaylistsByScreenKey(screenKey)
 
@@ -91,6 +94,7 @@ class PlaylistRepositoryTest {
             )
 
             `when`(api.getPlaylists(screenKey)).thenReturn(mockResponse)
+            `when`(api.getModified(screenKey)).thenReturn(ModifiedResponse(1000L))
 
             val result = repository.getPlaylistsByScreenKey(screenKey)
 
@@ -127,6 +131,7 @@ class PlaylistRepositoryTest {
         )
 
         `when`(api.getPlaylists(screenKey)).thenReturn(mockResponse)
+        `when`(api.getModified(screenKey)).thenReturn(ModifiedResponse(1000L))
 
         val result = repository.getPlaylistsByScreenKey(screenKey)
 
@@ -144,6 +149,7 @@ class PlaylistRepositoryTest {
         val exceptionMessage = "Network error"
 
         `when`(api.getPlaylists(screenKey)).thenThrow(RuntimeException(exceptionMessage))
+        `when`(api.getModified(screenKey)).thenReturn(ModifiedResponse(1000L))
 
         val exception = assertThrows(RuntimeException::class.java) {
             runBlocking {

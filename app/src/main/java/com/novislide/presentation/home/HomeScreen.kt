@@ -1,6 +1,7 @@
 package com.novislide.presentation.home
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -74,7 +75,11 @@ fun Slideshow(items: List<MediaItem>) {
         currentIndex = (currentIndex + 1) % items.size
     }
 
-    Crossfade(targetState = items[currentIndex], label = "MediaCrossfade") { item ->
+    Crossfade(
+        targetState = items[currentIndex],
+        animationSpec = tween(durationMillis = 2000), // animation duration
+        label = "MediaCrossfade"
+    ) { item ->
         MediaItemView(item)
     }
 }
