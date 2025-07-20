@@ -1,6 +1,5 @@
 package com.novislide.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.novislide.data.repository.PlaylistRepository
@@ -43,7 +42,6 @@ class HomeViewModel @Inject constructor(
             while (isActive) {
                 try {
                     val modified = repository.getModified(screenKey)
-                    Log.d("HomeViewModel", "Modified: $modified")
 
                     if (localModified != modified) {
                         localModified = modified
@@ -56,7 +54,6 @@ class HomeViewModel @Inject constructor(
                 } finally {
                     _loading.value = false
                 }
-                Log.d("HomeViewModel", "Refreshing media items")
                 delay(10 * 1000L) // 10 minutes
             }
         }
