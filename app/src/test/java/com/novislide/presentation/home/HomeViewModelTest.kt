@@ -63,9 +63,6 @@ class HomeViewModelTest {
         viewModel.loadMediaItems("Test")
         val error = viewModel.error.first { it != null }
 
-//        viewModel.error.test {
-//            assertEquals("Network error", awaitItem())
-//        }
         assertEquals(error, "Network error")
         assertEquals(emptyList<MediaItem>(), viewModel.mediaItems.value)
     }
