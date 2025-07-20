@@ -38,8 +38,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
-     * Periodically checks if the 'modified' timestamp for the given [screenKey] has changed.
-     * If it has, fetches the updated media list and updates the local state.
+     * Starts a repeating job that refreshes media items every 10 minutes for the given [screenKey].
      */
     fun loadMediaItems(screenKey: String) {
         refreshJob?.cancel()
@@ -51,6 +50,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Fetches the latest media items if the 'modified' timestamp has changed.
+     * Updates the local state accordingly.
+     *
+     * Marked as @VisibleForTesting to allow direct testing of the data fetching logic without delay or scheduling.
+     */
     @VisibleForTesting
     suspend fun fetchMediaItems(screenKey: String) {
         try {
