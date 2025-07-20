@@ -36,6 +36,10 @@ class HomeViewModel @Inject constructor(
         _error.value = null
     }
 
+    /**
+     * Periodically checks if the 'modified' timestamp for the given [screenKey] has changed.
+     * If it has, fetches the updated media list and updates the local state.
+     */
     fun loadMediaItems(screenKey: String) {
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
@@ -43,7 +47,7 @@ class HomeViewModel @Inject constructor(
                 try {
                     val modified = repository.getModified(screenKey)
 
-                    if (localModified != modified) {
+                    if (localModified < modified) {
                         localModified = modified
 
                         val items = repository.getPlaylistsByScreenKey(screenKey)
@@ -54,7 +58,7 @@ class HomeViewModel @Inject constructor(
                 } finally {
                     _loading.value = false
                 }
-                delay(10 * 1000L) // 10 minutes
+                delay(10 * 60 * 1000L) // 10 minutes
             }
         }
     }

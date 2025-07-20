@@ -8,6 +8,10 @@ private const val GET_MEDIA_BASE_URL = "https://test.onsignage.com/PlayerBackend
 
 class PlaylistRepositoryImpl @Inject constructor(private val api: NoviAPI) : PlaylistRepository {
 
+    /**
+     * Fetches playlists for the given [screenKey] and converts them into a list
+     * of domain [MediaItem]s ordered by their [orderKey].
+     */
     override suspend fun getPlaylistsByScreenKey(screenKey: String): List<MediaItem> {
 
         return api.getPlaylists(screenKey).playlists
@@ -23,6 +27,10 @@ class PlaylistRepositoryImpl @Inject constructor(private val api: NoviAPI) : Pla
 
     }
 
+    /**
+     * Returns the timestamp of the last modification for the playlist
+     * associated with [screenKey].
+     */
     override suspend fun getModified(screenKey: String): Long {
         return api.getModified(screenKey).modified
     }

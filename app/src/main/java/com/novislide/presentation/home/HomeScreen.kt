@@ -65,6 +65,10 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
     }
 }
 
+/**
+ * Cycles through the given [items] and displays the current one with a fade
+ * transition.
+ */
 @Composable
 fun Slideshow(items: List<MediaItem>) {
     var currentIndex by remember { mutableIntStateOf(0) }
@@ -84,6 +88,7 @@ fun Slideshow(items: List<MediaItem>) {
     }
 }
 
+/** Renders either an image or a video based on [item.mediaType]. */
 @Composable
 fun MediaItemView(item: MediaItem) {
     when (item.mediaType) {
